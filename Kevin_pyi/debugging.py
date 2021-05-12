@@ -12,8 +12,8 @@ def run():
         try:
             num = int(input('Enter a number: '))
             if num < 0:
-                print('Insert a positive number')
-                break
+                raise Exception('Insert a positive number')
+
             else:
                 print(divisors(num))
                 print('Finish')
