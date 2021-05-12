@@ -14,8 +14,13 @@ def main():
     print("Get the squares of the odd numbers")
     squares = list(map(lambda x: x**2, odds))
     print(squares)
-    
+
     #* REDUCE
+    from functools import reduce
+    print("------------REDUCE------------")
+    print("Get the multiplicacion of all numbers in the list above")
+    final_result = reduce(lambda a,b: a*b, squares)
+    print(final_result)
 
 if __name__ == "__main__":
     main()
