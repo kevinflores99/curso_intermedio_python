@@ -56,11 +56,25 @@ def level():
               ''')
 
 
-def score_of_the_game(letters_complited, word_to_guess):
+def score_of_the_game(letters_complited, word_to_guess, random_word):
     if ''.join(letters_complited) == word_to_guess:
-        return True
+        os.system('cls')
+        print(f'''======================================
+CONGRATULATIONS
+              
+You are the winner!
+======================================
+The word was : {random_word}
+''')
+
     else:
-        return False
+        print(f'''======================================
+GAME OVER
+
+You have lost the game!
+======================================  
+The word was : {random_word}            
+              ''')
 
 
 def attemps_allowed(attempts):
@@ -80,7 +94,7 @@ def attemps_allowed(attempts):
                 return difficulty
 
             elif difficulty == 2:
-                difficulty = attempts + 3
+                difficulty = attempts + (attempts*1.5)
                 done = True
                 return difficulty
 
@@ -116,18 +130,15 @@ def play():
 
     # establishing attemps according the difficulty choosed
     game_attempts_allowed = attemps_allowed(len(random_word))
-    attempts_played = 0
-
-    # os.system('cls')
-    #print("GUESS THE WORD!\n")
 
     # lines to be printed and changed according to the letter guessed
     lines = '_' * len(random_word)
     listed_as_letters = list(lines)
+    attempts_left = game_attempts_allowed
 
     while True:
         # counter of attempts left
-        attempts_left = game_attempts_allowed - attempts_played
+        attempts_played = []
 
         os.system('cls')
         print(f'Attempts left:\t\t{attempts_left}')
@@ -140,43 +151,42 @@ def play():
         # get the letter that player chose
         selected_letter = input("\nType a letter: ").upper()
 
-        # compare de letter chose with the letters of the word and get the indices
+        # compare the letter chose with the letters of the word and get the indices
         for index, string in enumerate(random_word):
             if selected_letter == string:
                 listed_as_letters[index] = selected_letter
+            else:
+                # this is the first step to know if the answer is wrong
+                attempts_played.append(string)
 
-        # for every attempts there will be one left (this method will be changed)
-        attempts_played += 1
+        # this is the second and final step to know if the answer is wrong
+        if len(attempts_played) >= len(random_word):
+            # if it's wrong then substract 1 attempt allowed
+            attempts_left -= 1
+        else:
+            pass
 
-        # when there is no more attemps left the loop will break
-        if attempts_played > game_attempts_allowed:
-            print('\nThere is no more attempts left')
+        #
+        if not '_' in listed_as_letters:
+            score_of_the_game(listed_as_letters, random_word, random_word)
             break
+        else:
+            pass
 
         print('''
 ======================================              
 Press ENTER to continue''')
         input()
 
-    # after breaking the loop, evaluate if the player have won or lost
-    if score_of_the_game(listed_as_letters, random_word):
-        print(f'''
-======================================
-CONGRATULATIONS
-              
-You are the winner!
-======================================
-The word was : {random_word}
-''')
-    else:
-        print(f'''
-======================================
-GAME OVER
+        # when there is no more attemps left the loop will break
+        if attempts_left == 0:
+            print('There is no more attempts left!')
+            print('\nPress ENTER to continue')
+            input()
+            os.system('cls')
 
-You have lost the game!
-======================================  
-The word was : {random_word}            
-              ''')
+            score_of_the_game(listed_as_letters, random_word, random_word)
+            break
 
 
 def run():
